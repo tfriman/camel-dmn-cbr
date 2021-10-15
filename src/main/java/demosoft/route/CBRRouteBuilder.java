@@ -13,19 +13,23 @@ public class CBRRouteBuilder extends RouteBuilder {
         rest("/")
                 .get("cbr/{choice}")
                   .route()
-                    .log("${headers}")
-                    .setBody(simple("{\"message\":  \"${header['choice']}\"}"))
+                    .process(ex -> {
+                      String choice = ex.getIn().getHeader("choice", String.class);
+                      ex.getIn().setBody(new DecisionRequest(choice));
+                    })
+                    .marshal().json()
                     .removeHeaders("*")
                     .setHeader(Exchange.HTTP_METHOD, constant("POST"))
                     .setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON))
                     .to("http:{{rule-engine.url}}?bridgeEndpoint=true")
                     .log("${body}")
                     .unmarshal().json()
-                .setBody(simple("${body['message']}"))
-                .log("transformed to ${body}")
-                .to("direct:cbr")
+                    .setBody(simple("${body['message']}"))
+                    .log("transformed to ${body}")
+                    .to("direct:cbr")
                 .endRest()
         ;
+
         from("direct:cbr")
                 .log("direct:cbr ${body}")
                 .choice()
@@ -34,11 +38,5 @@ public class CBRRouteBuilder extends RouteBuilder {
                 .otherwise()
                 .setBody(constant("nopes"))
                 ;
-    }
-
-    public static class Hello {
-        public String hello(String name) {
-            return "Hello " + name;
-        }
     }
 }
