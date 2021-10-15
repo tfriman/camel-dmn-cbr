@@ -23,7 +23,7 @@ public class CBRRouteBuilder extends RouteBuilder {
                     .log("${headers}")
                     .removeHeaders("*")
                     .setHeader("CamelHttpMethod", constant("GET"))
-                    .to("http:localhost:9080/hello?bridgeEndpoint=true")
+                    .to("http:{{rule-engine.url}}?bridgeEndpoint=true")
                     .log("${body}")
                     .unmarshal().json()
                 .setBody(simple("${body['message']}"))
