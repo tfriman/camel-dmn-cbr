@@ -12,20 +12,36 @@ import javax.inject.Named;
 public class CBRRouteBuilder extends RouteBuilder {
     @Override
     public void configure() throws Exception {
-        rest("/cbr/")
-                .produces("text/plain")
-                .get("hello")
-                .route()
-                .transform().constant("Hello World!")
+        rest("/")
+                .get("greet/{name}")
+                  .route()
+                  .bean(Hello.class, "hello(${header['name']})")
+                  .log("${body}")
                 .endRest()
-                .get("hello/{name}")
-                .route()
-                .bean(Hello.class, "hello(${header['name']})")
-                .log("${body}");
+                .get("cbr/")
+                  .route()
+                    .log("${headers}")
+                    .removeHeaders("*")
+                    .setHeader("CamelHttpMethod", constant("GET"))
+                    .to("http:localhost:9080/hello?bridgeEndpoint=true")
+                    .log("${body}")
+                    .unmarshal().json()
+                .setBody(simple("${body['message']}"))
+                .log("transformed to ${body}")
+                .to("direct:cbr")
+                .endRest()
+        ;
+        from("direct:cbr")
+                .log("direct:cbr ${body}")
+                .choice()
+                .when(simple("${body} == 'option1'"))
+                .setBody(constant("jee"))
+                .otherwise()
+                .setBody(constant("eih"))
+                ;
     }
 
     public static class Hello {
-
         public String hello(String name) {
             return "Hello " + name;
         }
