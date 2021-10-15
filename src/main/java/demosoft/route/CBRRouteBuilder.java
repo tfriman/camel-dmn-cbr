@@ -1,28 +1,23 @@
 package demosoft.route;
 
-import org.apache.camel.CamelContext;
-import org.apache.camel.Header;
+import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
+import javax.ws.rs.core.MediaType;
 
 @ApplicationScoped
 public class CBRRouteBuilder extends RouteBuilder {
     @Override
     public void configure() throws Exception {
         rest("/")
-                .get("greet/{name}")
-                  .route()
-                  .bean(Hello.class, "hello(${header['name']})")
-                  .log("${body}")
-                .endRest()
-                .get("cbr/")
+                .get("cbr/{choice}")
                   .route()
                     .log("${headers}")
+                    .setBody(simple("{\"message\":  \"${header['choice']}\"}"))
                     .removeHeaders("*")
-                    .setHeader("CamelHttpMethod", constant("GET"))
+                    .setHeader(Exchange.HTTP_METHOD, constant("POST"))
+                    .setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON))
                     .to("http:{{rule-engine.url}}?bridgeEndpoint=true")
                     .log("${body}")
                     .unmarshal().json()
@@ -35,9 +30,9 @@ public class CBRRouteBuilder extends RouteBuilder {
                 .log("direct:cbr ${body}")
                 .choice()
                 .when(simple("${body} == 'option1'"))
-                .setBody(constant("jee"))
+                .setBody(constant("yes!"))
                 .otherwise()
-                .setBody(constant("eih"))
+                .setBody(constant("nopes"))
                 ;
     }
 
