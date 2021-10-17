@@ -1,0 +1,149 @@
+<dmn:definitions xmlns:dmn="http://www.omg.org/spec/DMN/20180521/MODEL/" xmlns="https://kiegroup.org/dmn/_F894AC90-8C5E-437F-9E91-9C4C4FA2D5C7" xmlns:feel="http://www.omg.org/spec/DMN/20180521/FEEL/" xmlns:kie="http://www.drools.org/kie/dmn/1.2" xmlns:dmndi="http://www.omg.org/spec/DMN/20180521/DMNDI/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" id="_9ABC3063-EE89-40B2-9CC8-7C27D894B8EE" name="ContentBasedRouting" typeLanguage="http://www.omg.org/spec/DMN/20180521/FEEL/" namespace="https://kiegroup.org/dmn/_F894AC90-8C5E-437F-9E91-9C4C4FA2D5C7">
+  <dmn:extensionElements/>
+  <dmn:itemDefinition id="_9171A931-EC2B-4D3B-A36C-1419B180DCD4" name="tServiceLevel" isCollection="false"/>
+  <dmn:itemDefinition id="_4FBCC888-AC15-48D6-97F8-9D0005384DC4" name="tLoyaltyLevel" isCollection="false">
+    <dmn:typeRef>number</dmn:typeRef>
+  </dmn:itemDefinition>
+  <dmn:itemDefinition id="_78EC904C-A912-4E50-A03F-48077A84B39C" name="tTotalPrice" isCollection="false">
+    <dmn:typeRef>number</dmn:typeRef>
+  </dmn:itemDefinition>
+  <dmn:inputData id="_4825C6B2-2CA4-4E64-8EF6-68052C699557" name="TotalPrice">
+    <dmn:extensionElements/>
+    <dmn:variable id="_80B5B78E-8BCF-475B-87BE-BD680B1759CE" name="TotalPrice" typeRef="tTotalPrice"/>
+  </dmn:inputData>
+  <dmn:decision id="_2BE5B4EC-4C9F-46DC-AD24-B98BE54261F3" name="serviceLevel">
+    <dmn:extensionElements/>
+    <dmn:variable id="_AEB3A45F-DAD3-452D-9C12-43F4BE01F40D" name="serviceLevel" typeRef="tServiceLevel"/>
+    <dmn:informationRequirement id="_8DFD338A-B05C-4DCA-8805-D230EAB984BE">
+      <dmn:requiredInput href="#_4825C6B2-2CA4-4E64-8EF6-68052C699557"/>
+    </dmn:informationRequirement>
+    <dmn:informationRequirement id="_55EF0F8E-6770-484B-B222-446636993D32">
+      <dmn:requiredInput href="#_5941D953-E022-49A3-9220-52AE18908859"/>
+    </dmn:informationRequirement>
+    <dmn:decisionTable id="_6E275FD8-1BB0-4FDE-BE0A-4B126EBB9F5B" hitPolicy="UNIQUE" preferredOrientation="Rule-as-Row">
+      <dmn:input id="_4E0C0F1C-ACB6-4F5C-9C8C-85A2491B77D0">
+        <dmn:inputExpression id="_D852D8D4-1591-4AD2-A482-7EB84D770616" typeRef="tLoyaltyLevel">
+          <dmn:text>LoyaltyLevel</dmn:text>
+        </dmn:inputExpression>
+      </dmn:input>
+      <dmn:input id="_F6B782AB-4D5B-408D-8C54-5472A75A89B4">
+        <dmn:inputExpression id="_FBE9574F-9085-4D78-A5E1-602FB0A36DBB" typeRef="tTotalPrice">
+          <dmn:text>TotalPrice</dmn:text>
+        </dmn:inputExpression>
+      </dmn:input>
+      <dmn:output id="_30E30AAC-8A45-4C1E-B063-93DF1B2EE296"/>
+      <dmn:annotation name="Description"/>
+      <dmn:rule id="_860FF280-7D07-48FA-BD72-1570B04FB0BA">
+        <dmn:inputEntry id="_896BF46D-C535-44CB-A2A1-CD191E201BA2">
+          <dmn:text>0</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_D6A1DA19-C9A2-4C75-9611-C77223A251C8">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:outputEntry id="_8349FB31-421C-4977-91D6-5D394034988C">
+          <dmn:text>"standard"</dmn:text>
+        </dmn:outputEntry>
+        <dmn:annotationEntry>
+          <dmn:text>Always standard</dmn:text>
+        </dmn:annotationEntry>
+      </dmn:rule>
+      <dmn:rule id="_AE79B2ED-A01D-43D7-B120-292C2904DC0E">
+        <dmn:inputEntry id="_E27CB4D9-DABD-45AC-B5CA-40F91D3D2389">
+          <dmn:text>1</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_580A935E-D757-4DD3-B127-F01B060C25BC">
+          <dmn:text>&lt;500</dmn:text>
+        </dmn:inputEntry>
+        <dmn:outputEntry id="_5DBFCB61-0D32-4136-AA91-24F9C2FF13EF">
+          <dmn:text>"standard"</dmn:text>
+        </dmn:outputEntry>
+        <dmn:annotationEntry>
+          <dmn:text/>
+        </dmn:annotationEntry>
+      </dmn:rule>
+      <dmn:rule id="_C7FFCAC3-0010-4068-921E-E74B43077FEE">
+        <dmn:inputEntry id="_AA869E37-EBE7-40A2-95B4-ACB442F60764">
+          <dmn:text>1</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_33542D62-D400-4BD4-A22B-CF1AA586CD86">
+          <dmn:text>&gt;=500</dmn:text>
+        </dmn:inputEntry>
+        <dmn:outputEntry id="_A5F70D85-457C-41C9-98F1-BEC7377A6261">
+          <dmn:text>"premium"</dmn:text>
+        </dmn:outputEntry>
+        <dmn:annotationEntry>
+          <dmn:text>1 lvl can get premium if order is high enough</dmn:text>
+        </dmn:annotationEntry>
+      </dmn:rule>
+      <dmn:rule id="_F6BD282C-418D-4E48-82C3-59EF99FDBA76">
+        <dmn:inputEntry id="_B52B82A3-7FAE-43DC-8D78-BCE51E91B6A2">
+          <dmn:text>2</dmn:text>
+        </dmn:inputEntry>
+        <dmn:inputEntry id="_8CDB1D16-25CE-4D6D-826B-35D83AC9367F">
+          <dmn:text>-</dmn:text>
+        </dmn:inputEntry>
+        <dmn:outputEntry id="_20268F6E-5967-4221-B72F-7A693B012678">
+          <dmn:text>"premium"</dmn:text>
+        </dmn:outputEntry>
+        <dmn:annotationEntry>
+          <dmn:text>Always premium
+</dmn:text>
+        </dmn:annotationEntry>
+      </dmn:rule>
+    </dmn:decisionTable>
+  </dmn:decision>
+  <dmn:inputData id="_5941D953-E022-49A3-9220-52AE18908859" name="LoyaltyLevel">
+    <dmn:extensionElements/>
+    <dmn:variable id="_669D947B-EBEF-4573-A620-2E63487793B0" name="LoyaltyLevel" typeRef="tLoyaltyLevel"/>
+  </dmn:inputData>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="_E1231B83-93D3-494D-B3AD-61F2A20FA41F" name="DRG">
+      <di:extension>
+        <kie:ComponentsWidthsExtension>
+          <kie:ComponentWidths dmnElementRef="_6E275FD8-1BB0-4FDE-BE0A-4B126EBB9F5B">
+            <kie:width>50</kie:width>
+            <kie:width>100</kie:width>
+            <kie:width>100</kie:width>
+            <kie:width>100</kie:width>
+            <kie:width>100</kie:width>
+          </kie:ComponentWidths>
+        </kie:ComponentsWidthsExtension>
+      </di:extension>
+      <dmndi:DMNShape id="dmnshape-drg-_4825C6B2-2CA4-4E64-8EF6-68052C699557" dmnElementRef="_4825C6B2-2CA4-4E64-8EF6-68052C699557" isCollapsed="false">
+        <dmndi:DMNStyle>
+          <dmndi:FillColor red="255" green="255" blue="255"/>
+          <dmndi:StrokeColor red="0" green="0" blue="0"/>
+          <dmndi:FontColor red="0" green="0" blue="0"/>
+        </dmndi:DMNStyle>
+        <dc:Bounds x="334" y="360" width="100" height="50"/>
+        <dmndi:DMNLabel/>
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="dmnshape-drg-_2BE5B4EC-4C9F-46DC-AD24-B98BE54261F3" dmnElementRef="_2BE5B4EC-4C9F-46DC-AD24-B98BE54261F3" isCollapsed="false">
+        <dmndi:DMNStyle>
+          <dmndi:FillColor red="255" green="255" blue="255"/>
+          <dmndi:StrokeColor red="0" green="0" blue="0"/>
+          <dmndi:FontColor red="0" green="0" blue="0"/>
+        </dmndi:DMNStyle>
+        <dc:Bounds x="431.66666666666663" y="179.99999999999997" width="100" height="50"/>
+        <dmndi:DMNLabel/>
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="dmnshape-drg-_5941D953-E022-49A3-9220-52AE18908859" dmnElementRef="_5941D953-E022-49A3-9220-52AE18908859" isCollapsed="false">
+        <dmndi:DMNStyle>
+          <dmndi:FillColor red="255" green="255" blue="255"/>
+          <dmndi:StrokeColor red="0" green="0" blue="0"/>
+          <dmndi:FontColor red="0" green="0" blue="0"/>
+        </dmndi:DMNStyle>
+        <dc:Bounds x="567.6666666666666" y="360.33333333333326" width="100" height="50"/>
+        <dmndi:DMNLabel/>
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="dmnedge-drg-_8DFD338A-B05C-4DCA-8805-D230EAB984BE-AUTO-TARGET" dmnElementRef="_8DFD338A-B05C-4DCA-8805-D230EAB984BE">
+        <di:waypoint x="384" y="385"/>
+        <di:waypoint x="481.66666666666663" y="179.99999999999997"/>
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="dmnedge-drg-_55EF0F8E-6770-484B-B222-446636993D32-AUTO-TARGET" dmnElementRef="_55EF0F8E-6770-484B-B222-446636993D32">
+        <di:waypoint x="617.6666666666666" y="385.33333333333326"/>
+        <di:waypoint x="481.66666666666663" y="229.99999999999997"/>
+      </dmndi:DMNEdge>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</dmn:definitions>
