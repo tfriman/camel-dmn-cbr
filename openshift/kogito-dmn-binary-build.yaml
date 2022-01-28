@@ -1,0 +1,6 @@
+apiVersion: rhpam.kiegroup.org/v1
+kind: KogitoBuild
+metadata:
+  name: dmn-binary
+spec:
+  type: Binary
