@@ -1,0 +1,10 @@
+apiVersion: rhpam.kiegroup.org/v1
+kind: KogitoBuild
+metadata:
+  name: dmn-cbr-service
+spec:
+  type: RemoteSource
+  native: false
+  gitSource:
+    uri: 'https://github.com/tfriman/camel-dmn-cbr'
+    contextDir: dmn-cbr

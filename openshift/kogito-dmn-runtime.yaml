@@ -1,0 +1,4 @@
+apiVersion: rhpam.kiegroup.org/v1
+kind: KogitoRuntime
+metadata:
+  name: dmn-cbr-service
