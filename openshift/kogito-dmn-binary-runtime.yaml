@@ -2,3 +2,7 @@ apiVersion: rhpam.kiegroup.org/v1
 kind: KogitoRuntime
 metadata:
   name: dmn-binary
+spec:
+  env:
+    - name: quarkus.swagger-ui.always-include
+      value: 'true'
