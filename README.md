@@ -1,27 +1,12 @@
 # Example project how externalise content based routing decision.
 
-TODO
+This project contains two applications, one is a [Camel REST app](./camel-cbr) and another 
+is a [decision service REST app](./dmn-cbr) done with Kogito DMN. 
 
-## Running DMN with Kogito operator
+Camel app gets the 'order' in and uses order data fields to ask decision service whether or not the order is eligible for premium or just plain standard handling. 
 
-Install RHPAM Kogito Operator to your OpenShift. Create a project to host your stuff.
+Tested with OpenShift 4.9.
 
-See openshift dir for yamls.
-
-Create a binary build for your app:
-```
-oc apply -f openshift/kogito-dmn-binary.yaml
-```
-
-Run ```mvn package``` in dmn-cbr dir.
-
-Start the build.
-
-```
-oc start-build dmn-binary --from-dir=dmn-cbr/target --follow
-```
-
-When complete, deploy:
-```
-oc apply -f openshift/kogito-binary-runtime.yaml
-```
+# Todo
+## put bin 
+## enable swagger ui
