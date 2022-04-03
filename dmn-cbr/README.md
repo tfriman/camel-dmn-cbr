@@ -14,8 +14,41 @@ And uses those elements to decide serviceLevel:
 There are many ways how one can deploy this to OpenShift:
 
 * The barebones way is to containerize the apps locally and get them running on OpenShift.
-* Using source-to-image (s2i). One can point OpenShift to this git repo and ask it to clone it, select the correct subdir, then build the jar and containerize it and then run it. Not described here.
+* Using source-to-image (s2i). One can point OpenShift to this git repo and ask it to clone it, select the correct subdir, then build the jar and containerize it and then run it.
 * Using operator. Operator has two CRDs (k8s custom resource definitions), one is for building the app and another is for the runtime.
+
+## Remote Git repo with source-to-image build with JVM runtime
+
+First login to OpenShift, select the project
+
+```oc login ...```
+
+```oc project project-name-here```
+
+See what builders you have:
+
+```oc get imagestreams -n openshift | grep openjdk```
+
+For example, if you have ubi8-openjdk-11 and tag 1.3:
+
+```
+oc new-app ubi8-openjdk-11:1.3~https://github.com/tfriman/camel-dmn-cbr.git --context-dir=dmn-cbr --name=s2i-dmn-cbr
+
+oc logs -f BC/s2i-dmn-cbr
+
+oc create route edge s2i-dmn-cbr --service=s2i-dmn-cbr
+```
+
+Access the app:
+
+```
+export url=$(oc get route s2i-dmn-cbr -o go-template='{{.spec.host}}')
+```
+
+Open https://$url/q/swagger-ui
+
+Note: URLs are http, not https. Beware when accessing with Chromium based browsers which guess the url to be https always.
+
 
 ## Source-to-image build without operator
 
@@ -45,8 +78,7 @@ Deploy it (Assuming normal naming and versioning here from pom.xml, artifactId a
 
 ```
 oc new-app --name=dmn-cbr dmn-cbr:1.0.0
-oc expose service/dmn-cbr
-
+oc create route edge dmn-cbr --service=dmn-cbr
 ```
 
 Get url:
@@ -55,7 +87,7 @@ Get url:
 export url=$(oc get route dmn-cbr -o go-template='{{.spec.host}}')
 ```
 
-Open $url/q/swagger-ui to access the app.
+Open https://$url/q/swagger-ui to access the app.
 
 For more info, see https://quarkus.io/version/2.2/guides/deploying-to-openshift
 
